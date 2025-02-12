@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class FormResponse extends Model
 {
     use HasFactory;
-    protected $fillable = ['form_id', 'answer'];
+    protected $fillable = ['form_id', 'answers'];
 
     protected $casts = [
         'answers' => 'array',

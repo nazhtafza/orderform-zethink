@@ -9,17 +9,28 @@ use App\Http\Controllers\Controller;
 class FormResponseController extends Controller
 {
     public function store(Request $request, $formId)
-    {
-        dd($request->all());
-        $request->validate([
-            'answers' => 'required|array', // Pastikan data dikirim sebagai array
-        ]);
+{
+    // Debug apakah data terkirim
+    dd($request->all()); 
 
-        FormResponse::create([
-            'form_id' => $formId,
-            'answers' => json_encode($request->answers),
-        ]);
+    $request->validate([
+        'answers' => 'required|array',
+        'answers.file' => 'nullable|file|max:10240' // Maks 10MB
+    ]);
 
-        return redirect()->back()->with('success', 'Jawaban berhasil disimpan!');
-    }   
+    // proses upload
+    if ($request->hasFile('answers.file')) {
+        $filePath = $request->file('answers.file')->store('uploads', 'public');
+        $request->merge(['answers.file' => $filePath]);
+    }
+
+    // Simpan ke database dalam format JSON
+    FormResponse::create([
+        'form_id' => $formId,
+        'answers' => json_encode($request->answers),
+    ]);
+
+    return redirect()->back()->with('success', 'Form berhasil dikirim!');
+}
+
 }

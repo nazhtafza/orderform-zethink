@@ -9,7 +9,7 @@
 
     <h2>{{ $form->title }}</h2>
 
-    <form method="POST" action="{{ route('form.submit', ['formId' => $form->id]) }}">
+    <form method="POST" action="{{ route('submit.form', ['formId' => $form->id]) }}" enctype="multipart/form-data">
         @csrf
 
         @foreach($form->fields as $field)
@@ -19,13 +19,13 @@
                 <input type="text" name="answers[{{ $field['label'] }}]" required>
             @elseif($field['type'] === 'email')
                 <input type="email" name="answers[{{ $field['label'] }}]" required>
+                @elseif($field['type'] === 'select')
+                <select name="answers[{{ $field['label'] }}]">
+                @foreach($field['options'] ?? [] as $option) 
+                    <option value="{{ $option['value'] }}">{{ $option['value'] }}</option>
+                @endforeach
             @elseif($field['type'] === 'textarea')
                 <textarea name="answers[{{ $field['label'] }}]" required></textarea>
-            @elseif($field['type'] === 'select')
-                <select name="answers[{{ $field['label'] }}]">
-                    <option value="Pilihan 1">Pilihan 1</option>
-                    <option value="Pilihan 2">Pilihan 2</option>
-                </select>
             @endif
 
             <br>

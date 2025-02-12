@@ -49,18 +49,15 @@ class FormResource extends Resource
                             'file' => 'File Upload', // Tambahkan opsi file upload
                         ])
                         ->required(),
-
-                    FileUpload::make('file')
-                        ->label('Upload File')
-                        ->directory('uploads') // bair disimpen di storage/uploads
-                        ->visibility('public') 
-                        ->acceptedFileTypes([
-                            'image/*', 
-                            'application/pdf', 
-                            'application/msword',
-                            'application/vnd.openxmlformats-officedocument.wordprocessingml.document' //.docx
-                            ])
-                        ->maxSize(10240) // 10MB Maxx
+                        Repeater::make('options')
+                        ->label('Opsi Select')
+                        ->schema([
+                            TextInput::make('value')
+                            ->label('Opsi')
+                            ->required(),
+                        ])
+                        ->hidden(fn ($get) => $get('type') !== 'select') // Hanya muncul jika 'select'
+                        ->columns(2),
                         
                 ])
                 ->columns(2),

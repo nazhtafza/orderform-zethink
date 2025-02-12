@@ -14,20 +14,24 @@
             @foreach($form->fields as $field)
                 <div>
                     <label>{{ $field['label'] }}</label>
+                    
                     @if($field['type'] == 'text')
-                        <input type="text" name="{{ $field['label'] }}">
+                        <input type="text" name="answers[{{ $field['label'] }}]" required>
+
                     @elseif($field['type'] == 'email')
-                        <input type="email" name="{{ $field['label'] }}">
-                    @elseif($field['type'] == 'textarea')
-                        <textarea name="{{ $field['label'] }}"></textarea>
-                    @elseif($field['type'] == 'select')
-                        <select name="{{ $field['label'] }}">
-                            <option value="">Pilih</option>
-                            <option value="ux_ui_design">UX/UI Design</option>
-                            <option value="brand_identity">Brand Identity</option>
-                            <option value="design_system">Design System</option>
-                            <option value="web_design">Web Design</option>
+                        <input type="email" name="answers[{{ $field['label'] }}]" required>
+
+                    @elseif($field['type'] === 'select')
+                        <select name="answers[{{ $field['label'] }}]" required>
+                            @foreach($field['options'] ?? [] as $option) 
+                                <option value="{{ $option['value'] }}">{{ $option['value'] }}</option>
+                            @endforeach
                         </select>
+
+                    @elseif($field['type'] === 'textarea')
+                        <textarea name="answers[{{ $field['label'] }}]" required></textarea>
+                    @elseif($field['type'] === 'file')
+                        <input type="file" name="answers[{{ $field['label'] }}]">
                     @endif
                 </div>
             @endforeach
